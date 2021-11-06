@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Todo, fetchTodos } from "../redux/actions";
 import { StoreState } from "../redux/reducers";
+import { TodoItem } from "./TodoItem";
 
 interface AppProps {
   todos: Todo[];
@@ -9,37 +10,25 @@ interface AppProps {
   color?: string;
 }
 
-interface AppState {
-  counter: number;
-}
-
-class _App extends Component<AppProps, AppState> {
-  constructor(props: AppProps) {
-    super(props);
-    this.state = { counter: 0 };
-  }
-
-  onIncrement = (): void => {
-    this.setState((prevState) => {
-      return { counter: prevState.counter + 1 };
-    });
+class _App extends Component<AppProps> {
+  onButtonClick = (): void => {
+    this.props.fetchTodos();
   };
 
-  onDecrement = (): void => {
-    this.setState((prevState) => {
-      if (prevState.counter === 0) return { counter: prevState.counter };
-      return {
-        counter: prevState.counter - 1,
-      };
-    });
+  renderList = (): JSX.Element[] => {
+    return this.props.todos
+      .slice(0, 100)
+      .map((todo: Todo) => <TodoItem key={todo.id} title={todo.title} />);
   };
 
   render() {
+    console.log(this.props.todos);
+
     return (
       <div>
-        <button onClick={this.onIncrement}>Increment</button>
-        <button onClick={this.onDecrement}>Decrement</button>
-        <h3>Count: {this.state.counter}</h3>
+        <h2>To Do List:</h2>
+        <button onClick={this.onButtonClick}>Fetch List</button>
+        <ul>{this.renderList()}</ul>
       </div>
     );
   }
