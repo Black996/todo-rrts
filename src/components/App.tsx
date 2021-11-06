@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Todo, fetchTodos } from "../redux/actions";
+import { StoreState } from "../redux/reducers";
 
 interface AppProps {
+  todos: Todo[];
+  fetchTodos(): any;
   color?: string;
 }
 
@@ -8,7 +13,7 @@ interface AppState {
   counter: number;
 }
 
-class App extends Component<AppProps, AppState> {
+class _App extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.state = { counter: 0 };
@@ -40,4 +45,8 @@ class App extends Component<AppProps, AppState> {
   }
 }
 
-export default App;
+const mapStateToProps = ({ todos }: StoreState): { todos: Todo[] } => {
+  return { todos };
+};
+
+export const App = connect(mapStateToProps, { fetchTodos })(_App);
